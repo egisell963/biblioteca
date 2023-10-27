@@ -1,0 +1,137 @@
+{% extends "menu.html" %}
+
+{% block titulo %} Mi galería {% endblock %}
+
+{% block contenido %}
+
+<h1>Mi galería</h1>
+
+Aqui encontraras los libros que has rentado en nuestra biblioteca y los libros que ya has entregado
+<br><br>
+
+<div class="card">
+    <div class="card-header">
+        <h5>Libros Rentados</h5>
+    </div>
+    <div class="card-body">
+        <!-- <h4 class="card-title">Libros disponibles</h4> -->
+
+        <div class="table-responsive">
+            <table class="table table-warning">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">TITULO</th>
+                        <th scope="col">AUTOR</th>
+                        <th scope="col">AÑO DE PUBLICACIÓN</th>
+                        <th scope="col">CANTIDAD DISPONIBLE</th>
+                        <th scope="col">ACCIONES</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for libro in libros %}
+                    <tr>
+                        <td>{{ libro.id_libro }}</td>
+                        <td>{{ libro.titulo }}</td>
+                        <td>{{ libro.autor }}</td>
+                        <td>{{ libro.fecha }}</td>
+                        <td>{{ libro.cantidad }}</td>
+                        <td><button class="btn btn-secondary descripcion" type="button"
+                            data-descripcion="{{libro.id_libro}}">Descripción</button>
+                            <button class="btn btn-dark">Devolver libro</button>
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+
+
+    </div>
+    <div class="card-footer text-muted">
+
+    </div>
+</div>
+<br><br><br>
+<div class="card">
+    <div class="card-header">
+        <h5>Libros Regresados</h5>
+    </div>
+    <div class="card-body">
+        <!-- <h4 class="card-title">Libros disponibles</h4> -->
+
+        <div class="table-responsive">
+            <table class="table table-primary">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">TITULO</th>
+                        <th scope="col">AUTOR</th>
+                        <th scope="col">AÑO DE PUBLICACIÓN</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Programacion en java</td>
+                        <td>Jhon Marcilla</td>
+                        <td>1989</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+    </div>
+    <div class="card-footer text-muted">
+
+    </div>
+</div>
+<!-- Modal para ver la descripción de un libro -->
+<div id="seccionIdLibro2">
+    <div class="modal" tabindex="-1" id="modal_descripcion">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Descripción del libro</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body" value="{{ des.value | default:'' }}">
+            <textarea readonly class="form-control" name="descripcion" id="" cols="30" rows="10"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% block script %}
+  
+  <script>
+  
+    $(document).on('click', '.descripcion', function () {
+      let id = $(this).attr('data-descripcion')
+      $.ajax({
+        url: '/descripcion/' + id,
+        type: 'GET',
+        dataType: 'json',
+        success: function (response) {
+          $('textarea[name="descripcion"]').val(response.descripcion);
+          $('#modal_descripcion').modal('show')
+        },
+        error: function (error) {
+          // Maneja el error aquí
+        }
+      });
+    });
+  
+//   $(document).on('hidden.bs.modal', '#modal_descripcion', function () {
+//     // Código a ejecutar cuando el modal se cierra
+//     $('.form-control').val('');
+//   });
+  
+  </script>
+  
+  {% endblock %}
+  
+  {% endblock %}

@@ -1,0 +1,130 @@
+{% extends "menu.html" %}
+{% load static %}
+
+{% block titulo %} Inicio {% endblock %}
+
+{% block contenido %}
+
+<h1>Bienvenido a la biblioteca</h1>
+
+<br><br>
+
+<div class="card">
+  <div class="card-header">
+    <button class="btn btn-info" type="button" data-bs-toggle="modal" data-bs-target="#modal_crear">Agregar
+      libro</button>
+  </div>
+  <div class="card-body">
+    <h4 class="card-title">Libros disponibles</h4>
+
+    <div class="table-responsive">
+      <table class="table table-info">
+        <thead>
+          <tr>
+            <!-- <th scope="col">ID</th> -->
+            <th scope="col">TITULO</th>
+            <th scope="col">AUTOR</th>
+            <th scope="col">AÑO DE PUBLICACIÓN</th>
+            <th scope="col">CANTIDAD DISPONIBLE</th>
+            <th scope="col">ACCIONES</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for libro in libros %}
+          <tr>
+            <!-- <td>{{ libro.id_libro }}</td> -->
+            <td>{{ libro.titulo }}</td>
+            <td>{{ libro.autor }}</td>
+            <td>{{ libro.fecha }}</td>
+            <td>{{ libro.cantidad }}</td>
+            <td>
+              <div id="acciones">
+                <a role="button" class="btn btn-primary botones"
+                href="{% url 'editar' libro.id_libro %}">Editar</a>
+                  <button class="btn btn-secondary descripcion botones" type="button"
+                    data-descripcion="{{libro.id_libro}}">Descripción</button>
+                  <button class="btn btn-dark botones">Tomar prestado</button>
+                  <a href="{% url 'eliminar' libro.id_libro %}" class="btn btn-danger botones" role="button">Eliminar</a>
+            </div>
+            </td>
+
+
+          </tr>
+
+          {% endfor %}
+
+        </tbody>
+      </table>
+    </div>
+
+
+  </div>
+  <div class="card-footer text-muted">
+
+  </div>
+</div>
+
+<!-- Formulario para agregar un nuevo libro -->
+
+<div class="modal" tabindex="-1" id="modal_crear">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Aregar un nuevo libro</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        {% include 'form_libro.html' %}
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para ver la descripción de un libro -->
+<div id="seccionIdLibro2">
+  <div class="modal" tabindex="-1" id="modal_descripcion">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Descripción del libro</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" value="{{ des.value | default:'' }}">
+          <textarea readonly class="form-control" name="descripcion" id="" cols="30" rows="10"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% block script %}
+
+<script>
+
+  $(document).on('click', '.descripcion', function () {
+    let id = $(this).attr('data-descripcion')
+    $.ajax({
+      url: '/descripcion/' + id,
+      type: 'GET',
+      dataType: 'json',
+      success: function (response) {
+        $('textarea[name="descripcion"]').val(response.descripcion);
+        $('#modal_descripcion').modal('show')
+      },
+      error: function (error) {
+        // Maneja el error aquí
+      }
+    });
+  });
+
+$(document).on('hidden.bs.modal', '#modal_descripcion', function () {
+  // Código a ejecutar cuando el modal se cierra
+  $('.form-control').val('');
+});
+
+</script>
+
+{% endblock %}
+
+{% endblock %}

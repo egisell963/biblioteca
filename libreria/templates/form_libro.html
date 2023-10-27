@@ -1,0 +1,29 @@
+<form enctype= "multipart/form-data" method="post">
+
+  {% csrf_token %}
+
+  <!-- <div id="seccionIdLibro">
+
+  </div> -->
+
+  {% for campo in form %}
+
+  <div class="mb-3">
+    <label for="">{{ campo.label }}</label>
+    {% if campo.field.widget.input_type != 'text' and campo.field.widget.input_type != 'number' %}
+    <textarea name="{{ campo.name }}" id="" class="form-control" cols="30" rows="5">{{ campo.value | default:'' }}</textarea>
+    {% else %}
+    <input class="form-control" type="{{ campo.field.widget.input_type }}" name="{{ campo.name }}" value="{{ campo.value | default:'' }}">
+  {% endif %}
+  </div>
+
+  <div class="col-12 help-tex"> {{ campo.errors }} </div>
+
+
+  {% endfor %}
+  <div class="modal-footer">
+    <a href="{% url 'inicio' %}" type="button" class="btn btn-danger">Cancelar</a>
+    <button type="submit" class="btn btn-success">Guardar</button>
+  </div>
+  
+</form>
