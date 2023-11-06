@@ -21,7 +21,9 @@
   <nav class="navbar navbar-expand navbar-light bg-light">
     <div class="nav navbar-nav">
       <a class="nav-item nav-link active" href="inicio">Inicio</a>
+      {% if not user.is_superuser %}
       <a class="nav-item nav-link" href="galeria">Mi galería</a>
+      {% endif %}
       <a class="nav-item nav-link" href="{% url 'exit' %}">Cerrar sesion</a>
     </div>
   </nav>

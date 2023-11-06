@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -31,8 +32,8 @@ class Rol(models.Model):
 class Libro_usuario(models.Model):
    
     id_libro_usuario = models.AutoField(primary_key=True)
-    id_libro = models.ForeignKey('Libro', on_delete=models.DO_NOTHING, blank=True)
-    id_usuario = models.ForeignKey('Usuario', on_delete=models.DO_NOTHING, blank=True)
+    id_libro = models.ForeignKey(Libro, on_delete=models.DO_NOTHING, blank=True)
+    id_usuario = models.ForeignKey(User, on_delete=models.DO_NOTHING, blank=True)
     estado = models.CharField(max_length=30, verbose_name="Estado")
 
 

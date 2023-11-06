@@ -11,8 +11,10 @@
 
 <div class="card">
   <div class="card-header">
+    {% if user.is_superuser %}
     <button class="btn btn-info" type="button" data-bs-toggle="modal" data-bs-target="#modal_crear">Agregar
       libro</button>
+      {% endif %}
   </div>
   <div class="card-body">
     <h4 class="card-title">Libros disponibles</h4>
@@ -38,14 +40,18 @@
             <td>{{ libro.fecha }}</td>
             <td>{{ libro.cantidad }}</td>
             <td>
-              <div id="acciones">
-                <a role="button" class="btn btn-primary botones"
+              <div id="acciones" style="display: flex;">
+                <button class="btn btn-secondary descripcion botones m-2" type="button"
+                data-descripcion="{{libro.id_libro}}">Descripción</button>
+                {% if user.is_superuser %}
+                <a role="button" class="btn btn-primary botones m-2"
                 href="{% url 'editar' libro.id_libro %}">Editar</a>
-                  <button class="btn btn-secondary descripcion botones" type="button"
-                    data-descripcion="{{libro.id_libro}}">Descripción</button>
-                  <button class="btn btn-dark botones">Tomar prestado</button>
-                  <a href="{% url 'eliminar' libro.id_libro %}" class="btn btn-danger botones" role="button">Eliminar</a>
-            </div>
+                <a href="{% url 'eliminar' libro.id_libro %}" class="btn btn-danger botones m-2" role="button">Eliminar</a>
+                {% else %}
+                <a role="button" class="btn btn-dark botones m-2"
+                href="{% url 'alquilar' libro.id_libro %}">Alquilar</a>
+                {% endif %}
+           </div>
             </td>
 
 
