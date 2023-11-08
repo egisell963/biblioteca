@@ -11,6 +11,7 @@ class Libro(models.Model):
     descripcion = models.TextField(null=True, verbose_name="Descripción")
     fecha = models.IntegerField(null=True, verbose_name="Año")
     cantidad = models.IntegerField(null=True, verbose_name="Cantidad")
+    estado = models.CharField(null=False, max_length=30, verbose_name="Estado")
 
     def __str__(self):
         titulo = "Titulo: " + self.titulo

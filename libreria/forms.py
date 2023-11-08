@@ -15,7 +15,7 @@ class CustomUserCreationForm(UserCreationForm):
 class Libro_form(forms.ModelForm):
     class Meta:
         model = Libro
-        fields = '__all__'
+        fields = ['titulo', 'autor', 'descripcion', 'fecha', 'cantidad']
 
 class Usuario(forms.ModelForm):
     class Meta:

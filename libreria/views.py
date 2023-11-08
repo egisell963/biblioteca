@@ -48,10 +48,13 @@ def inicio(request):
     # return HttpResponse("<h1>Bienvenido a la Biblioteca</h1>")
     form = Libro_form(request.POST or None)
     if form.is_valid():
-        form.save()
+        form.save()   
+        libro = Libro.objects.latest('id_libro')
+        libro.estado = 'activo'
+        libro.save()
         return redirect('inicio')
 
-    libros = Libro.objects.all()
+    libros = Libro.objects.filter(estado = 'activo')
     return render(request, 'vistas/inicio.html', {'libros': libros, 'form': form})
 
 @login_required
@@ -65,12 +68,12 @@ def galeria(request):
     return render(request, 'vistas/galeria.html', {'libro_devuelto': libro_devuelto, 'libro_alquilado': libro_alquilado})
 
 @login_required
-def eliminar(id_libro):
+def eliminar(request,id_libro):
     
-    print(id_libro)
-    # libro = Libro.objects.get(id_libro=id_libro)
-    # libro.delete()
-    # return redirect('inicio')
+    libro = Libro.objects.get(id_libro=id_libro)
+    libro.estado = 'eliminado'
+    libro.save()
+    return redirect('inicio')
 
 
 @login_required
