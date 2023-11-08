@@ -66,9 +66,11 @@ def galeria(request):
 
 @login_required
 def eliminar(id_libro):
-    libro = Libro.objects.get(id_libro=id_libro)
-    libro.delete()
-    return redirect('inicio')
+    
+    print(id_libro)
+    # libro = Libro.objects.get(id_libro=id_libro)
+    # libro.delete()
+    # return redirect('inicio')
 
 
 @login_required
@@ -98,17 +100,16 @@ def alquilar(request, id_libro):
         if libro_alquilado:
             return redirect('galeria')
         else:
-            libro_devuelto = Libro_usuario.objects.get(id_libro=id_libro, id_usuario=request.user.id, estado='devuelto')
+            libro_devuelto = Libro_usuario.objects.filter(id_libro=id_libro, id_usuario=request.user.id, estado='devuelto').first()
             libro = Libro.objects.get(id_libro=id_libro)
             if libro_devuelto:
-                libro_devuelto = Libro_usuario.objects.get(id_libro_usuario=libro_devuelto.id_libro_usuario)
                 libro_devuelto.estado = 'alquilado'
                 libro_devuelto.save()
             else: 
                 usuario = request.user
                 estado = 'alquilado'
                     
-                galeria = Libro_usuario(id_libro = libro, id_usuario = usuario, estado = estado)
+                galeria = Libro_usuario.objects.create(id_libro = libro, id_usuario = usuario, estado = estado)
                 galeria.save()
             libro.cantidad -= 1
             libro.save()
